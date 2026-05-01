@@ -1,227 +1,293 @@
-# Networking
-🌐 Networking Fundamentals → Advanced (System Design Guide)
+# 🌐 Networking Fundamentals → Advanced (System Design Guide)
 
-This guide covers essential networking concepts required for system design interviews, backend engineering, and cloud architecture.
+This guide covers essential networking concepts required for:
+- System Design Interviews  
+- Backend Engineering  
+- Cloud Architecture  
+
+---
+
+## 📊 Architecture Overview
 
 <img width="440" height="470" alt="image" src="https://github.com/user-attachments/assets/99a2d6e0-a05a-48ce-91a0-7239b2e5e4d4" />
 
+---
 
-**📌 Table of Contents**
-IP Addressing (Public vs Private)
-CIDR Notation
-Subnets
-DNS (Deep Dive + Records)
-NAT (Network Address Translation)
-TCP/IP Basics
-Ports & Sockets
-Routing (High-Level)
-Load Balancers
-CDN Basics
-Networking in Cloud (Azure/AWS concept overview)
+## 📌 Table of Contents
 
-📍 1. IP Addressing
+1. IP Addressing (Public vs Private)  
+2. CIDR Notation  
+3. Subnets  
+4. DNS (Deep Dive + Records)  
+5. NAT (Network Address Translation)  
+6. TCP/IP Basics  
+7. Ports & Sockets  
+8. Routing (High-Level)  
+9. Load Balancers  
+10. CDN Basics  
+11. Networking in Cloud (Azure/AWS Overview)  
+
+---
+
+## 📍 1. IP Addressing
+
 An IP address uniquely identifies a device on a network.
 
-🌍 Public IP
-Accessible from the internet
-Globally unique
+### 🌍 Public IP
+- Accessible from the internet  
+- Globally unique  
 
-Used for:
-Websites
-APIs
-Load balancers
+**Used for:**
+- Websites  
+- APIs  
+- Load balancers  
 
-🔒 Private IP
-Used inside internal networks (LAN/VNet)
-Not reachable from internet
+### 🔒 Private IP
+- Used inside internal networks (LAN/VNet)  
+- Not reachable from the internet  
 
-Used for:
-Databases
-Internal services
+**Used for:**
+- Databases  
+- Internal services  
 
-**IPv4 vs. IPv6**
-IPv4: 32-bit address (e.g., 192.168.1.1). Limited to ~4.3 billion addresses (exhausted).
-IPv6: 128-bit address (e.g., 2001:0db8:85a3:0000:0000:8a2e:0370:7334). Created to solve IPv4 exhaustion.
+### 🔄 IPv4 vs IPv6
 
-📍 2. CIDR (Classless Inter-Domain Routing)
-CIDR defines IP range and network size. IP/Prefix -> 192.168.1.0/24
+| Type | Description |
+|------|------------|
+| IPv4 | 32-bit (e.g., `192.168.1.1`) – ~4.3 billion addresses (exhausted) |
+| IPv6 | 128-bit (e.g., `2001:db8::7334`) – solves exhaustion |
 
-The Slash Notation (/n)The number after the slash represents the Network Prefix (how many bits are fixed).Formula: $2^{(32 - n)}$ gives the total number of IP addresses in the block.
+---
 
-🔹 Common CIDR ranges
-CIDR	IPs
-/24	256
-/25	128
-/26	64
-/16	65,536
+## 📍 2. CIDR (Classless Inter-Domain Routing)
 
-📍 3. Subnets
-A subnet divides a larger network into smaller isolated networks.
+CIDR defines IP range and network size.
 
-Split into subnets:
+Example: 192.168.1.0/24
+
+- `/n` = number of fixed network bits  
+- Formula:  
+
+2^(32 - n)
+
+→ Total number of IPs  
+
+### 🔹 Common CIDR Ranges
+
+| CIDR | IPs |
+|------|-----|
+| /24  | 256 |
+| /25  | 128 |
+| /26  | 64  |
+| /16  | 65,536 |
+
+---
+
+## 📍 3. Subnets
+
+A subnet divides a large network into smaller isolated networks.
+
+### Example
 
 10.0.1.0/24 → Web Tier
 10.0.2.0/24 → App Tier
 10.0.3.0/24 → DB Tier
 
-In a cloud environment (AWS/Azure), you divide your network into:
 
-Public Subnets: Resources with a route to an Internet Gateway (e.g., Load Balancers).
+### Cloud Subnets
 
-Private Subnets: Resources with no direct internet access (e.g., Databases, Internal APIs).
+- **Public Subnet**
+  - Has route to Internet Gateway  
+  - Example: Load Balancers  
 
-🔹 Why subnets?
-Security isolation
-Traffic control (NSG rules)
-Better organization
-Scalability
+- **Private Subnet**
+  - No direct internet access  
+  - Example: Databases, Internal APIs  
 
-📍 4. DNS (Domain Name System)
+### 🔹 Why Subnets?
+
+- Security isolation  
+- Traffic control (NSG rules)  
+- Better organization  
+- Scalability  
+
+---
+
+## 📍 4. DNS (Domain Name System)
 
 DNS converts domain names → IP addresses.
-Example:
 google.com → 142.250.x.x
 
-🔹 DNS Flow
+### 🔹 DNS Flow
+
+
 Browser
-  ↓
+↓
 Recursive Resolver (ISP)
-  ↓
+↓
 Root Server (.)
-  ↓
+↓
 TLD Server (.com)
-  ↓
+↓
 Authoritative DNS Server
-  ↓
+↓
 IP Address Returned
 
-🔹 DNS Records Types
-🟢 A Record
 
-Maps domain → IPv4
+### 🔹 DNS Record Types
 
-example.com → 1.2.3.4
-🟣 AAAA Record
+| Record | Purpose | Example |
+|--------|--------|---------|
+| A      | Domain → IPv4 | example.com → 1.2.3.4 |
+| AAAA   | Domain → IPv6 | google.com -> 2607:f8b0 |
+| CNAME  | Alias | www → example.com |
+| MX     | Mail server | example.com → mail.example.com |
+| TXT    | Metadata, DKIM / verification | SSL, ownership |
+| NS     | Specifies the Authoritative Nameservers for a zone. | ns1.awsdns.com |
 
-Maps domain → IPv6
+---
 
-🟡 CNAME Record
+## 📍 5. NAT (Network Address Translation)
 
-Alias to another domain
+NAT allows multiple private devices to share a single public IP.
 
-www.example.com → example.com
-🔵 MX Record
+### 🧠 Key Concept
+- Acts as a **one-way valve**
+- Outbound allowed, inbound blocked (by default)
 
-Mail servers
+### 🔹 NAT Gateway
+- Enables private subnet → internet access  
+- Prevents inbound internet traffic  
 
-example.com → mail.example.com
-🟠 TXT Record
+### 🔹 Types of NAT
 
-Verification / metadata
-Used for:
+| Type | Description |
+|------|------------|
+| Static NAT | 1 private IP ↔ 1 public IP |
+| Dynamic NAT | Pool of public IPs |
 
-SSL verification
-Domain ownership
-🔴 NS Record
+### 🔥 Used In
+- Home routers  
+- Cloud gateways  
+- Firewalls  
 
-Defines authoritative name servers
+---
 
-📍 5. NAT (Network Address Translation)
-NAT allows multiple devices in a private network to share a single public IP address to communicate with the internet.
+## 📍 6. TCP/IP Basics
 
-NAT Gateway: A managed service that allows instances in a private subnet to connect to the internet (for updates/patches) but prevents the internet from initiating a connection with those instances.
+### 🔹 TCP (Transmission Control Protocol)
+- Reliable  
+- Connection-based  
+- Uses handshake  
 
-Security Benefit: It acts as a one-way valve for traffic.
+**3-way handshake:**
 
-🔹 Types of NAT
-1. Static NAT
-
-1 private IP ↔ 1 public IP
-
-2. Dynamic NAT
-
-Pool of public IPs shared dynamically
-
-🔥 Used in:
-Home routers
-Cloud gateways
-Firewalls
-
-📍 6. TCP/IP Basics
-🔹 TCP (Transmission Control Protocol)
-Reliable
-Connection-based
-Uses handshake
-3-way handshake:
 SYN → SYN-ACK → ACK
-🔹 IP (Internet Protocol)
-Handles addressing and routing
-Unreliable (no delivery guarantee)
 
-📍 7. Ports & Sockets
-🔹 Port
-Identifies application on a machine
-Examples:
-80   → HTTP
-443  → HTTPS
-5432 → PostgreSQL
-3306 → MySQL
+### 🔹 IP (Internet Protocol)
+- Handles addressing & routing  
+- Unreliable (no delivery guarantee)  
 
-🔹 Socket
-Combination of:
-IP + Port
+---
 
-Example:
-10.0.0.4:443
+## 📍 7. Ports & Sockets
+
+### 🔹 Port
+Identifies an application on a machine.
+
+| Port | Service |
+|------|--------|
+| 80   | HTTP |
+| 443  | HTTPS |
+| 5432 | PostgreSQL |
+| 3306 | MySQL |
+
+### 🔹 Socket
+
+Socket = IP + Port
+Example: 10.0.0.4:443
 
 
-📍 8. Routing (High-Level)
+---
 
-Routing determines path of packets across networks.
-🔹 Protocol used:
-Border Gateway Protocol (BGP)
-Flow:
+## 📍 8. Routing (High-Level)
+
+Routing determines packet paths across networks.
+
+### 🔹 Protocol
+- BGP (Border Gateway Protocol)
+
+### 🔹 Flow
+
 Device → Router → ISP → Backbone → Destination Network
 
-📍 9. Load Balancers
 
-Distribute traffic across servers.
+---
 
-🔹 Types
-L4 Load Balancer (TCP/UDP)
-L7 Load Balancer (HTTP/HTTPS)
+## 📍 9. Load Balancers
 
-🔹 Algorithms
-Round Robin
-Least Connections
-IP Hash
+Distribute traffic across multiple servers.
 
-📍 10. CDN (Content Delivery Network)
+### 🔹 Types
+
+| Type | Layer |
+|------|------|
+| L4   | TCP/UDP |
+| L7   | HTTP/HTTPS |
+
+### 🔹 Algorithms
+
+- Round Robin  
+- Least Connections  
+- IP Hash  
+
+---
+
+## 📍 10. CDN (Content Delivery Network)
 
 Caches content closer to users.
 
-Example providers:
+### 🔹 Providers
+- Cloudflare  
+- Akamai  
 
-Cloudflare
-Akamai
-🔹 Benefits
-Faster response
-Reduced backend load
-Global availability
+### 🔹 Benefits
 
-📍 11. Networking in Cloud (System Design View)
+- Faster response  
+- Reduced backend load  
+- Global availability  
 
-Example architecture in Microsoft Azure:
+---
+
+## 📍 11. Networking in Cloud (System Design View)
+
+### Example Architecture (Azure)
 
 User
- ↓
+↓
 CDN
- ↓
+↓
 Load Balancer
- ↓
+↓
 API Gateway (APIM)
- ↓
+↓
 App Tier (Subnet)
- ↓
+↓
 Database (Private Subnet)
+
+
+---
+
+## 🚀 Final Notes
+
+This guide is designed to:
+- Build strong networking fundamentals  
+- Help in system design interviews  
+- Provide clarity for cloud architecture  
+
+---
+
+
+
+
 
