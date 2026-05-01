@@ -3,7 +3,7 @@
 
 This guide covers essential networking concepts required for system design interviews, backend engineering, and cloud architecture.
 
-<img width="3087" height="3999" alt="image" src="https://github.com/user-attachments/assets/99a2d6e0-a05a-48ce-91a0-7239b2e5e4d4" />
+<img width="440" height="470" alt="image" src="https://github.com/user-attachments/assets/99a2d6e0-a05a-48ce-91a0-7239b2e5e4d4" />
 
 
 **📌 Table of Contents**
