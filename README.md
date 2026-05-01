@@ -3,6 +3,9 @@
 
 This guide covers essential networking concepts required for system design interviews, backend engineering, and cloud architecture.
 
+<img width="3087" height="3999" alt="image" src="https://github.com/user-attachments/assets/99a2d6e0-a05a-48ce-91a0-7239b2e5e4d4" />
+
+
 **📌 Table of Contents**
 IP Addressing (Public vs Private)
 CIDR Notation
@@ -72,4 +75,153 @@ Security isolation
 Traffic control (NSG rules)
 Better organization
 Scalability
+
+📍 4. DNS (Domain Name System)
+
+DNS converts domain names → IP addresses.
+Example:
+google.com → 142.250.x.x
+
+🔹 DNS Flow
+Browser
+  ↓
+Recursive Resolver (ISP)
+  ↓
+Root Server (.)
+  ↓
+TLD Server (.com)
+  ↓
+Authoritative DNS Server
+  ↓
+IP Address Returned
+
+🔹 DNS Records Types
+🟢 A Record
+
+Maps domain → IPv4
+
+example.com → 1.2.3.4
+🟣 AAAA Record
+
+Maps domain → IPv6
+
+🟡 CNAME Record
+
+Alias to another domain
+
+www.example.com → example.com
+🔵 MX Record
+
+Mail servers
+
+example.com → mail.example.com
+🟠 TXT Record
+
+Verification / metadata
+Used for:
+
+SSL verification
+Domain ownership
+🔴 NS Record
+
+Defines authoritative name servers
+
+📍 5. NAT (Network Address Translation)
+NAT allows multiple devices in a private network to share a single public IP address to communicate with the internet.
+
+NAT Gateway: A managed service that allows instances in a private subnet to connect to the internet (for updates/patches) but prevents the internet from initiating a connection with those instances.
+
+Security Benefit: It acts as a one-way valve for traffic.
+
+🔹 Types of NAT
+1. Static NAT
+
+1 private IP ↔ 1 public IP
+
+2. Dynamic NAT
+
+Pool of public IPs shared dynamically
+
+🔥 Used in:
+Home routers
+Cloud gateways
+Firewalls
+
+📍 6. TCP/IP Basics
+🔹 TCP (Transmission Control Protocol)
+Reliable
+Connection-based
+Uses handshake
+3-way handshake:
+SYN → SYN-ACK → ACK
+🔹 IP (Internet Protocol)
+Handles addressing and routing
+Unreliable (no delivery guarantee)
+
+📍 7. Ports & Sockets
+🔹 Port
+Identifies application on a machine
+Examples:
+80   → HTTP
+443  → HTTPS
+5432 → PostgreSQL
+3306 → MySQL
+
+🔹 Socket
+Combination of:
+IP + Port
+
+Example:
+10.0.0.4:443
+
+
+📍 8. Routing (High-Level)
+
+Routing determines path of packets across networks.
+🔹 Protocol used:
+Border Gateway Protocol (BGP)
+Flow:
+Device → Router → ISP → Backbone → Destination Network
+
+📍 9. Load Balancers
+
+Distribute traffic across servers.
+
+🔹 Types
+L4 Load Balancer (TCP/UDP)
+L7 Load Balancer (HTTP/HTTPS)
+
+🔹 Algorithms
+Round Robin
+Least Connections
+IP Hash
+
+📍 10. CDN (Content Delivery Network)
+
+Caches content closer to users.
+
+Example providers:
+
+Cloudflare
+Akamai
+🔹 Benefits
+Faster response
+Reduced backend load
+Global availability
+
+📍 11. Networking in Cloud (System Design View)
+
+Example architecture in Microsoft Azure:
+
+User
+ ↓
+CDN
+ ↓
+Load Balancer
+ ↓
+API Gateway (APIM)
+ ↓
+App Tier (Subnet)
+ ↓
+Database (Private Subnet)
 
